@@ -1,0 +1,64 @@
+
+<div id="main">							
+  <div class="header">
+    <table style="width:100%;" cellpadding=0 cellspacing=0>
+      <tr>
+        <td align=left>
+          <h2 class="title">
+            <a name="groups"><%= @users.total_entries %></a> <%= User.model_name.human(:count =>  @users.total_entries) %>
+          </h2>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+
+  <div class="users">
+    <table width="100%" cellpadding=0 cellspacing=0 class="row_table">
+      <tr>
+        <th style="width:20px;"></th>
+        <th><b><%= User.human_attribute_name(:username) %></b></th>
+        <th><b><%= t("single.name") %></b></th>
+        <th><b><%= Group.model_name.human %></b></th>
+        <th><b><%= User.human_attribute_name(:current_login_at) %></b></th>
+        <th style="width:20px;"></th>
+        <th style="width:20px;"></th>
+      </tr>
+      <% for user in @users%>
+        <tr class="<%= cycle("row_a", "row_b") %>">
+          <td>
+            <%= link_to  user_avatar(user, :size => "tiny"), user, :title => "#{h user.username}"  %>
+          </td>
+          <td>
+            <%= icon("admin") if user.is_admin? %>
+            <b><%= link_to "#{h user.username}", user %></b>
+          </td>
+          <td><i><%= h user.first_name %> <%= h user.last_name %></i></td>
+          <td>
+            <%= user.group.name %>
+          </td>
+          <td>
+            <% if user.current_login_at %>
+              <%= friendly_date user.current_login_at  %>
+            <% else %>
+              <%= t("single.none") %>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to "Add Friend", {:action => "create", :controller => "friendship"} %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+
+  </div>
+
+  <br>
+  <div align=center>
+    <%= will_paginate @users %>
+  </div>
+  <br>
+
+</div>
+
+
